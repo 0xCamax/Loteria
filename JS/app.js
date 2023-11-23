@@ -9,82 +9,85 @@ class boleto {
     }
 }
 
-alert("Agrega Nombre y contacto de los participantes de la rifa");
-
 // Agregar los participantes de la rifa
 
 const boletos = [];
 
+const comprarBoleto = document.getElementById("agregarBoleto");
 
-for (let i = 0; i < 5; i++) {
-    let nombre = null;
-    let contacto = null;
+comprarBoleto.addEventListener("click", agregarBoleto);
 
-    if (nombre === "" || nombre === null) {
-        nombre = prompt("Ingrese el nombre");
-        if (nombre === "" || nombre === null) {
-            alert("Por favor, ingrese un nombre.");
-        }
-    }
-
-    if (contacto === "" || contacto === null) {
-        contacto = prompt("Ingrese el contacto");
-        if (contacto === "" || contacto === null) {
-            alert("Por favor, ingrese un contacto.");
-        }
-    }
+function agregarBoleto(){
+    const nombre = document.getElementById("nombre").value;
+    const contacto = document.getElementById("contacto").value;
 
     boletos.push(new boleto(nombre, contacto));
 
-    nombre = null;
-    contacto = null;
+    document.getElementById("nombre").value = "";
+    document.getElementById("contacto").value = "";
+
+    actualizarTabla();
+    console.log(boletos);
 }
 
-console.log(boletos);
 
-// Registrar los prompts en la pagina
+// Registrar los inputs en la pagina
+function actualizarTabla() {
+    let boletosVendidos = document.getElementById("tablaboletos");
+    boletosVendidos.innerHTML = "";
 
-let boletosVendidos = document.getElementById("tablaboletos");
+        for (const boleto of boletos){
+            let tr = document.createElement("tr");
+            let nombre = document.createElement("td");
+            let numero = document.createElement("td");
+            nombre.innerHTML = boleto.nombre;
+            numero.innerHTML = boleto.numero;
+            tr.appendChild(nombre);
+            tr.appendChild(numero);
 
-for (const boleto of boletos){
-    let tr = document.createElement("tr");
-    let nombre = document.createElement("td");
-    let numero = document.createElement("td");
-    nombre.innerHTML = boleto.nombre;
-    numero.innerHTML = boleto.numero;
-    tr.appendChild(nombre);
-    tr.appendChild(numero);
-
-    boletosVendidos.appendChild(tr);
-
+            boletosVendidos.appendChild(tr);
+        
+        }
 }
-
 
 // Obtener un numero al azar para elegir al ganador
 
+let ganador = undefined;
+
 function loteria() {
-    let numero = Math.ceil(Math.random() * (boleto.numero - 1));
-    return numero;
+    if (boletos.length === 0){
+        throw new Error("Agregar boletos");
+        }
+        else if (boletos.length > 0) {
+            let numero = Math.ceil(Math.random() * (boleto.numero - 1));
+            ganador = numero;
+            console.log(numero);
+
+            //Mostrar resultados en la pagina
+            const nombreGanador = nombreDelGanador();
+            let boletoGanador = document.getElementById("numeroGanador");
+            let amigoGanador = document.getElementById("ganador");
+
+            boletoGanador.innerHTML= `${ganador}`;
+            amigoGanador.innerHTML= `El boleto ganador es de ${nombreGanador}!!`;
+            
+        }
 }
 
-let ganador = loteria();
+const botonLoteria = document.getElementById("loteria");
+botonLoteria.addEventListener("click", loteria);
+
 
 //Obtener el nombre del ganador en base al numero ganador
 
 function nombreDelGanador(){
+    if (ganador === undefined) { 
+        throw new Error("El ganador no se a definido");
+    }
+    else if (ganador != undefined){
     const nombreGanador = boletos.find(boleto => boleto.numero === ganador);
         
     return nombreGanador ? nombreGanador.nombre: null;
+    }
 }
 
-const nombreGanador = nombreDelGanador();
-
-//Mostrar resultados en la pagina
-
-let boletoGanador = document.getElementById("numeroGanador");
-let amigoGanador = document.getElementById("ganador");
-
-boletoGanador.innerHTML= `${ganador}`;
-amigoGanador.innerHTML= `El boleto ganador es de ${nombreGanador}!!`;
-
-alert(`El ganador es ${nombreGanador}`);

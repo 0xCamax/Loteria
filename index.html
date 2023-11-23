@@ -9,6 +9,16 @@
 <h1>Lotería entre amigos</h1>
 <div>
     <h2>Boletos participantes</h2>
+
+    <form action="">
+        <label for="nombre">Nombre</label>
+        <input type="text" name="nombre" id="nombre" placeholder="Nombre del participante">
+        <label for="contacto">Contacto</label>
+        <input type="text" name="contacto" id="contacto" placeholder="Cel, redes sociales, correo o etc..">
+        <button id="agregarBoleto" type="button">Agregar Boleto</button>
+    </form>
+
+
     <table>
         <thead>
             <tr>
@@ -19,6 +29,9 @@
         <tbody id="tablaboletos">
         </tbody>
     </table>
+</div>
+<div>
+    <button id="loteria" type="button">LOTERIA</button>
 </div>
 <div>
     <h2>Numero Ganador</h2>
