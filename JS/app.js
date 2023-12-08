@@ -1,4 +1,6 @@
 const boleto = [];
+let boletosStorage = localStorage.getItem("boletos");
+let boletosJSON = JSON.parse(boletosStorage);
 
 class Boleto{
     constructor(nombre, contacto, numeroBoleto) {
@@ -19,26 +21,53 @@ function addCeros(x) {
 
 function startLotery(n){
     for (let i = 0; i < n; i++) {
-        const boletos = new Boleto("", "", i);
+        let boletos = new Boleto("", "", i);
         boleto.push(boletos);
+        guardarLocal("boletos", JSON.stringify(boleto)); 
+    }
+}
+
+const guardarLocal = (clave, valor) => {localStorage.setItem(clave, valor)};
+
+
+
+function inputError(mensaje, id) {
+    let idError = document.getElementById(id);
+    let newId = mensaje.replace(/\s/g, "");
+    let input = document.getElementById(`${newId}`);
+    if (!input){
+        idError.insertAdjacentHTML("afterend", `<span id=${newId}>${mensaje}</span>`);
     }
 }
 
 
 function modificarNombre(x, n, m) {
+    debugger
+    let success = false;
+    let input = document.getElementById("Noexiste");
+    let input2 = document.getElementById("NoDisponible");
+        if(input){
+            input.remove();
+        }
+        if (input2){
+            input2.remove();
+        }
     for (let i = 0; i < boleto.length; i++) {
         if (x >= boleto.length) {
-            console.log(x + " no existe");
+            inputError("No existe", "numero6");
             break;
         } else if (boleto[i].numeroBoleto == x && boleto[i].nombre != "") {
-            console.log(x + " esta vendido")
+            inputError("No Disponible", "numero6")
             break;
         } else if (boleto[i].numeroBoleto == x && boleto[i].nombre === ""){
             boleto[i].nombre = n;
             boleto[i].contacto = m;
+            guardarLocal("boletos", JSON.stringify(boleto)); 
+            success = true;
             break;
         }
     }
+    return success; 
 }
 
 let random = document.getElementById("random");
@@ -46,9 +75,9 @@ random.addEventListener("click", getRandomBoleto)
 
 function getRandomBoleto(){
     let disponible = boleto.filter((y) => y.nombre === "")
-    let numero = disponible[Math.ceil(Math.random() * disponible.length)].numeroBoleto;
+    let x = Math.ceil((Math.random() * disponible.length) - 1)
+    let numero = disponible[x].numeroBoleto;
     numero = numero.toString();
-    console.log(numero)
     for (let i = 1; i <= 6; i++) {
         document.getElementById("numero" + i).value = numero.charAt(i-1);
     }
@@ -68,42 +97,50 @@ function agregarBoleto(){
     }
 
     if (!nombre || nombre === "" || !contacto || contacto === ""){
-        alert("Llena la información")
-        } else {
-
+        inputError("Llena la información", "agregarBoleto");
+    } else {
+        let input = document.getElementById("Llenalainformación")
+        if(input){
+            input.remove();
+            }
         let numeroBoleto = numeros.join("").trim();
 
-        modificarNombre(numeroBoleto, nombre, contacto);
+        let isValid = modificarNombre(numeroBoleto, nombre, contacto);
 
-        document.getElementById("nombre").value = "";
-        document.getElementById("contacto").value = "";
-        for (let i = 1; i <= 6; i++) {
-            document.getElementById('numero' + i).value = "";
+        if (isValid) {    
+            document.getElementById("nombre").value = "";
+            document.getElementById("contacto").value = "";
+            for (let i = 1; i <= 6; i++) {
+                document.getElementById('numero' + i).value = "";
+            }
         }
     }
 }
+
 let ganador = undefined;
 
 function loteria() {
-    if (boleto.length <= 1){
-        throw new Error("Agregar boletos");
-        alert("Agregar boletos");
-        }
-        else if (boleto.length > 0) {
-            let numero = Math.ceil(Math.random() * (boleto.length));
-            ganador = boleto[numero].numeroBoleto;
-            console.log("el numero ganador es " + numero);
+    let boletosDisponibles = boleto.filter((y) => y.nombre === "")
+    if (boletosDisponibles.length > 0) {
+        inputError("No se han vendido todos los boletos", "loteria");
+    } else {
+        let input = document.getElementById("Nosehanvendidotodoslosboletos");
+        if(input){
+            input.remove();
+            }
+        let numero = Math.ceil(Math.random() * (boleto.length));
+        ganador = boleto[numero].numeroBoleto;
 
-            //Mostrar resultados en la pagina
-            const nombreGanador = nombreDelGanador();
-            let boletoGanador = document.getElementById("numeroGanador");
-            let amigoGanador = document.getElementById("ganador");
+        //Mostrar resultados en la pagina
+        const nombreGanador = nombreDelGanador();
+        let boletoGanador = document.getElementById("numeroGanador");
+        let amigoGanador = document.getElementById("ganador");
 
-            boletoGanador.innerHTML= `${ganador}`;
-            amigoGanador.innerHTML= `El boleto ganador es de ${nombreGanador}!!`;
-            
-        }
+        boletoGanador.innerHTML= `${ganador}`;
+        amigoGanador.innerHTML= `El boleto ganador es de ${nombreGanador}!!`;
+    }
 }
+
 
 const botonLoteria = document.getElementById("loteria");
 botonLoteria.addEventListener("click", loteria);
@@ -116,6 +153,8 @@ function nombreDelGanador(){
     return nombreGanador.nombre;
 }
 
-startLotery(1000000);
+startLotery(10);
 console.log(boleto);
+console.log(typeof boletosJSON);
+
 
