@@ -1,0 +1,112 @@
+*{margin: 0;
+padding: 0;
+font-family:sans-serif;
+color: white;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
+    background-color: rgb(50, 45, 53);
+    margin-top: 50px;
+}
+
+.registro {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+  padding: 20px;
+  background-color: rgb(50, 35, 53);
+  text-align: center;
+  width: 520px;
+  border-radius: 10px;
+  margin: 100px;
+  box-shadow: 1px 1px 2px black;
+}
+
+.numeros{
+    padding: 10px;
+    input{
+        width: 30px;
+        height: 50px;
+        background-color: rgb(50, 45, 53);
+        text-align: center;
+        font-size: 25px;
+        padding-left: 10px;
+    }
+    button{
+        width: 30px;
+        height: 30px;
+        font-size: larger;
+        font-weight: bold;
+    }
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0px 30px 0px 30px;
+    background-color: rgb(50, 35, 53);
+    label{
+        margin: 3px;
+        text-align: start;
+    }
+    input{
+        margin: 3px;
+        width: 300px;
+        background-color: rgb(50, 45, 53);
+        margin: 5px;
+        padding: 5px;
+    }
+    button{
+        width: 150px;
+        color: rgb(50, 45, 53);
+        margin: 10px;
+    }
+}
+
+#initlotery{
+    color: rgb(50, 45, 53);
+    color: rgb(50, 45, 53);
+    padding: 10px;
+    margin: 50px;
+    border-radius: 10px;
+    font-weight: bolder;
+    font-size: 16px;
+}
+
+.loteria{   
+    display: flex;
+    flex-direction: column;
+    #loteria{
+        color: rgb(50, 45, 53);
+        padding: 15px 40px 15px 40px;
+        margin: 25px;
+        border-radius: 10px;
+        font-weight: bolder;
+        font-size: 24px;
+    }
+}
+
+span{
+    font-size: small;
+    font-style: italic;
+    color: red;
+    text-align: center;
+}
+
+.historial{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    margin:50px;
+    text-align: start;
+    width: 520px;
+}
+
