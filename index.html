@@ -9,40 +9,9 @@
 <body>
 <h1>Lotería entre amigos</h1>
 
-<div class="nuevarifa"><button id="initlotery">Nueva Rifa</button></div>
+<div class="nuevarifa" id="nuevarifa"><button id="initlotery">Nueva Rifa</button></div>
 
-<div class="registro">
-    <h2>Registrar Boleto</h2>
-    <form action="">
-        <div class="numeros">
-            <input type="number" id="numero1">
-            <input type="number" id="numero2">
-            <input type="number" id="numero3">
-            <input type="number" id="numero4">
-            <input type="number" id="numero5">
-            <input type="number" id="numero6">
-            <button id="random" type="button">↺</button>
-        </div>
-        
-        <label for="nombre">Nombre</label>
-        <input type="text" name="nombre" id="nombre" placeholder="Nombre del participante">
-        <label for="contacto">Contacto</label>
-        <input type="text" name="contacto" id="contacto" placeholder="Cel, redes sociales, correo o etc..">
-        <button id="agregarBoleto" type="button">Agregar Boleto</button>
-    </form>
-</div>
-
-<div class="loteria">
-    <button id="loteria" type="button">Lotería!</button>
-</div>
-
-<div class="historial">
-    <h2>Historial</h2>
-    <ul id="historial">  
-    </ul>
-</div>
-
-    <script src="./JS/app.js"></script>
+    <script src="./JS/init.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html> 

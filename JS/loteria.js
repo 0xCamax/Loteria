@@ -1,14 +1,37 @@
-const boleto = [];
-const ganador = [];
 
-class Boleto{
-    constructor(nombre, contacto, numeroBoleto) {
-        this.nombre = nombre;
-        this.contacto = contacto;
-        this.numeroBoleto = addCeros(numeroBoleto);
-        this.precio = 1;
+function actualizarHistorial() {
+    let historial = document.getElementById("historial");
+    historial.innerHTML="";
+    let historialGanadores = JSON.parse(localStorage.getItem("Historial"));
+    if (Array.isArray(historialGanadores)) {
+        for (const listahistorial of historialGanadores) {
+                let li = document.createElement("li");
+                let historialLista = document.createElement("p");
+                historialLista.innerHTML=`${listahistorial.numero}................${listahistorial.fecha}`;
+                li.appendChild(historialLista);
+                
+                historial.appendChild(li);
+            }
+        } else if (!historialGanadores){
+                console.log("No hay historial")
+        } else {
+                let li = document.createElement("li");
+                let historialLista = document.createElement("p");
+                historialLista.innerHTML=`${historialGanadores.numero}................${historialGanadores.fecha}`;
+                li.appendChild(historialLista);
+                
+                historial.appendChild(li);
+        }
     }
-}
+
+
+const random = document.getElementById("random");
+random.addEventListener("click", getRandomBoleto);
+const botonLoteria = document.getElementById("loteria");
+botonLoteria.addEventListener("click", loteria);
+const botonRegistro = document.getElementById("agregarBoleto");
+botonRegistro.addEventListener("click", agregarBoleto)
+
 
 class Ganador{
     constructor(numero) {
@@ -17,29 +40,7 @@ class Ganador{
     }
 }
 
-
-function addCeros(x) { 
-    y = x.toString().length;  
-    for (let i = 6; i > y; i--) {
-        x = '0' + x;
-    }
-    return x;
-}   
-
-function startLotery(n){
-    for (let i = 0; i < n; i++) {
-        let boletos = new Boleto("", "", i);
-        boleto.push(boletos);
-        localStorage.setItem("boletos", JSON.stringify(boleto));
-    }
-}
-
-let iniciarLoteria = document.getElementById("initlotery");
-iniciarLoteria.addEventListener("click", initLotery);
-
-function initLotery() {
-    let initialized = true;
-}
+const ganador = []; 
 
 function inputError(mensaje, id) {
     let idError = document.getElementById(id);
@@ -63,14 +64,15 @@ function modificarNombre(x, n, m) {
         }
     for (let i = 0; i < boleto.length; i++) {
         if (x >= boleto.length) {
-            inputError("No existe", "numero6");
+            inputError("No existe", "numeros");
             break;
         } else if (boleto[i].numeroBoleto == x && boleto[i].nombre != "") {
-            inputError("No Disponible", "numero6")
+            inputError("No Disponible", "numeros")
             break;
         } else if (boleto[i].numeroBoleto == x && boleto[i].nombre === ""){
             boleto[i].nombre = n;
             boleto[i].contacto = m;
+            localStorage.setItem("boletos", JSON.stringify(boleto));
             success = true;
             break;
         }
@@ -78,27 +80,23 @@ function modificarNombre(x, n, m) {
     return success; 
 }
 
-let random = document.getElementById("random");
-random.addEventListener("click", getRandomBoleto)
+
 
 function getRandomBoleto(){
     let disponible = boleto.filter((y) => y.nombre === "")
     let x = Math.ceil((Math.random() * disponible.length) - 1)
     let numero = disponible[x].numeroBoleto;
     numero = numero.toString();
-    for (let i = 1; i <= 6; i++) {
+    for (let i = 1; i <= 4; i++) {
         document.getElementById("numero" + i).value = numero.charAt(i-1);
     }
 }
-
-const comprarBoletos = document.getElementById('agregarBoleto');
-comprarBoletos.addEventListener("click", agregarBoleto);
 
 function agregarBoleto(){
     let nombre = document.getElementById('nombre').value;  
     let contacto = document.getElementById('contacto').value;
     let numeros = [];
-    for (let i = 1; i <= 6; i++) {
+    for (let i = 1; i <= 4; i++) {
         numeros.push(document.getElementById('numero' + i).value);
     }
 
@@ -114,7 +112,7 @@ function agregarBoleto(){
         let isValid = modificarNombre(numeroBoleto, nombre, contacto);
 
         if (isValid) {    
-            for (let i = 1; i <= 6; i++) {
+            for (let i = 1; i <= 4; i++) {
                 document.getElementById('numero' + i).value = "";
             }
             Swal.fire({
@@ -129,14 +127,12 @@ function agregarBoleto(){
 }
 
 function loteria() {
-    let random = Math.floor(Math.random() * (boleto.length));
-    let numero = boleto[random - 1].numeroBoleto;
+    let RNG = Math.floor(Math.random() * (boleto.length));
+    let numero = boleto[RNG - 1].numeroBoleto;
     let nuevoGanador = new Ganador(numero);
     ganador.push(nuevoGanador);
     localStorage.setItem("Historial", JSON.stringify(ganador));
     let ganadorActual = ganador[ganador.length - 1];
-    let historialGanadores = JSON.parse(localStorage.getItem("Historial"));
-    console.log(historialGanadores);  
     let boletoGanador = document.getElementById("historialLista");
     let boletosDisponibles = boleto.filter((y) => y.nombre === "")
     if (boletosDisponibles.length > 0) {
@@ -163,25 +159,3 @@ function loteria() {
         boletoGanador.innerHTML = `${numeroHistorial}.....${fechaHistorial}}`;
         }
 }
-
-function actualizarHistorial(){
-    let historial = document.getElementById("historial");
-    historial.innerHTML="";
-    let historialGanadores = JSON.parse(localStorage.getItem("Historial"));
-        for (const listahistorial of historialGanadores) {
-            let li = document.createElement("li");
-            let historialLista = document.createElement("p");
-            historialLista.innerHTML=`${listahistorial.numero}................${listahistorial.fecha}`;
-            li.appendChild(historialLista);
-
-            historial.appendChild(li);
-        }
-}
-
-
-const botonLoteria = document.getElementById("loteria");
-botonLoteria.addEventListener("click", loteria);
-
-
-startLotery(100);
-actualizarHistorial()
